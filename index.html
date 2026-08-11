@@ -223,6 +223,46 @@ button[type="submit"]:disabled { opacity: .6; cursor: not-allowed; }
             <input id="traslado" type="text" placeholder="Ej: 32249" required autocomplete="off">
         </div>
 
+        <div class="input-group">
+            <span>Origen</span>
+            <input id="origen" type="text" list="lista-direcciones" placeholder="Busque o escriba una dirección" required autocomplete="off">
+        </div>
+
+        <div class="input-group">
+            <span>Destino</span>
+            <input id="destino" type="text" list="lista-direcciones" placeholder="Busque o escriba una dirección" required autocomplete="off">
+        </div>
+
+        <!-- Lista compartida de direcciones para Origen y Destino -->
+        <datalist id="lista-direcciones">
+            <option value="Gran Avenida 1621, Paine">
+            <option value="Av. Bellavista 0335, Providencia">
+            <option value="El Regidor 66, Las Condes">
+            <option value="Los Industriales 657, Huechuraba / Taller El Faro">
+            <option value="Taller Maestranza México: Av. México 746, Recoleta">
+            <option value="Calle Plath 1738, Sector Santa Inés, Viña del Mar">
+            <option value="Av. León Bustos 239, Linares">
+            <option value="Av. B. O'Higgins 1061, Rancagua">
+            <option value="Juan Castellón 4151, Quinta Normal">
+            <option value="Los Aromos N° 3294, Renca">
+            <option value="Av. Presidente Eduardo Frei Montalva 5150, Renca / Automotriz Jerez Muñoz">
+            <option value="Longitudinal Sur Km 174, Teno">
+            <option value="Av. Bellavista 0335, Providencia / Salazar Israel">
+            <option value="Taller de Av. B. O'Higgins 1061, Rancagua">
+            <option value="Av. Caupolicán 1490, Temuco">
+            <option value="Av. Ecuador 330, Chillán">
+            <option value="Taller Maestranza México">
+            <option value="Av. Alameda 27, Rancagua">
+            <option value="Playa de Aro 6287, Vitacura">
+            <option value="Paicaví 2937, Concepción">
+            <option value="Av. Presidente Eduardo Frei Montalva 5150, Renca">
+            <option value="Acopio Maipú">
+            <option value="Cliente retira de sucursal">
+            <option value="Avenida Cristóbal Colón 7940, Las Condes">
+            <option value="General Mackenna 1030, Temuco">
+            <option value="Av. Raúl Labbé 12.981, Lo Barnechea / Ditec Automóviles S.A.">
+        </datalist>
+
         <button type="submit" id="btn-submit">
             Generar guía de despacho
         </button>
@@ -252,10 +292,12 @@ document.getElementById("form").addEventListener("submit", async e => {
     const btn = document.getElementById("btn-submit");
 
     const traslado = document.getElementById("traslado").value.trim();
+    const origen   = document.getElementById("origen").value.trim();
+    const destino  = document.getElementById("destino").value.trim();
 
-    if (!traslado) {
+    if (!traslado || !origen || !destino) {
         msg.className = "msg error";
-        msg.innerHTML = "Debe ingresar el N° de traslado.";
+        msg.innerHTML = "Debe completar N° de traslado, origen y destino.";
         return;
     }
 
@@ -267,7 +309,11 @@ document.getElementById("form").addEventListener("submit", async e => {
         const response = await fetch(WEBHOOK_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nro_traslado: traslado })
+            body: JSON.stringify({
+                nro_traslado: traslado,
+                origen: origen,
+                destino: destino
+            })
         });
 
         if (!response.ok) throw new Error();
