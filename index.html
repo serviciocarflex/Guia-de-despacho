@@ -176,22 +176,8 @@ button[type="submit"]:disabled { opacity: .6; cursor: not-allowed; }
     padding: 6px 18px;
     font-size: 15px;
     font-weight: 700;
-    margin: 10px 0 20px;
+    margin: 10px 0 24px;
 }
-
-#link-pdf {
-    display: inline-block;
-    padding: 12px 28px;
-    border-radius: 12px;
-    background: var(--primary);
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    margin-bottom: 24px;
-}
-
-#link-pdf:hover { background: var(--primary-dark); }
 
 #btn-volver {
     display: inline-block;
@@ -227,8 +213,6 @@ button[type="submit"]:disabled { opacity: .6; cursor: not-allowed; }
         <p style="color:var(--muted);font-size:13px;">N° Traslado</p>
         <div class="ot-label" id="success-traslado">—</div>
         <br>
-        <a id="link-pdf" href="#" target="_blank">📄 Ver / Descargar PDF</a>
-        <br>
         <button id="btn-volver">← Nueva solicitud</button>
     </div>
 
@@ -250,7 +234,7 @@ button[type="submit"]:disabled { opacity: .6; cursor: not-allowed; }
 </div>
 
 <script>
-const WEBHOOK_URL = "https://shale-alarm-prodigy.ngrok-free.dev/webhook-test/guia-despacho";
+const WEBHOOK_URL = "https://shale-alarm-prodigy.ngrok-free.dev/webhook/guia-despacho";
 
 // ── Botón volver ──
 document.getElementById("btn-volver").addEventListener("click", () => {
@@ -289,7 +273,6 @@ document.getElementById("form").addEventListener("submit", async e => {
         if (!response.ok) throw new Error();
 
         const data = await response.json();
-        const pdfUrl = data.pdf_url || data.pdfUrl || "#";
 
         const trasladoEnviado = traslado;
 
@@ -297,7 +280,6 @@ document.getElementById("form").addEventListener("submit", async e => {
         document.getElementById("form").reset();
 
         document.getElementById("success-traslado").textContent = trasladoEnviado;
-        document.getElementById("link-pdf").href = pdfUrl;
         document.getElementById("form").style.display = "none";
         document.getElementById("success-screen").style.display = "block";
 
